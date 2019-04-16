@@ -1,1 +1,4 @@
 selenium==3.141.0
+pytest==4.4.1
+pytest-xdist==1.28.0
+Faker==1.0.5
