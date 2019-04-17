@@ -7,8 +7,7 @@ __shared_web_driver = None
 
 def start_driver(name, driver_key="default"):
     __shared_web_driver = SharedWebDriver()
-    driver = DriverManager().start_driver(name, None) 
-    __shared_web_driver.driver = driver
+    __shared_web_driver.driver = DriverManager().start_driver(name, None) 
     __driver[driver_key] = __shared_web_driver
     Key.current = driver_key
 
