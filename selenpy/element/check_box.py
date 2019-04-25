@@ -1,4 +1,4 @@
-from element.base_element import BaseElement
+from selenpy.element.base_element import BaseElement
 
 
 class CheckBox(BaseElement):

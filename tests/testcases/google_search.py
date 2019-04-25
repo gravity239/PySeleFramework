@@ -1,5 +1,5 @@
-from testcases.test_base import TestBase
-from pages.google_home_page import GoogleHomePage
+from tests.testcases.test_base import TestBase
+from tests.pages.google_home_page import GoogleHomePage
 
 
 class GoogleSearchTest(TestBase):
