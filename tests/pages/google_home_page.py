@@ -1,5 +1,6 @@
 from selenpy.element.text_box import TextBox
 from selenpy.support.conditions import be, have
+from selenpy.support import browser
 
 
 class GoogleHomePage():
@@ -10,7 +11,8 @@ class GoogleHomePage():
         pass
     
     def open_google(self):
-        pass
+        browser.open_url("https://google.com")
+        browser.wait_until(have.title("Google"))
 
     def search(self, key_word):
         # self._txt_search.wait_for_visible()

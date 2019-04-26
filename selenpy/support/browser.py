@@ -1,17 +1,19 @@
-import os
 
 from selenpy.support import factory
 from selenpy.common import config
 from selenpy.helper.wait import wait_for
-import logging
+
+
+def get_driver():
+    return factory.get_shared_driver()
 
 
 def maximize_browser():
-    driver().maximize_window()
+    get_driver().maximize_window()
 
         
 def open_url(url):
-    driver().get(url)    
+    get_driver().get(url)    
 
 
 def switch_to_driver(driver_key="default"):
@@ -30,14 +32,10 @@ def start_driver(name, remote_host, key="default"):
     factory.start_driver(name, remote_host, key)
 
 
-def driver():
-    return factory.get_shared_driver()
-
-
 def wait_until(webdriver_condition, timeout=None, polling=None):
     if timeout is None:
         timeout = config.timeout
     if polling is None:
         polling = config.poll_during_waits
 
-    return wait_for(driver(), webdriver_condition, timeout, polling)
+    return wait_for(get_driver(), webdriver_condition, timeout, polling)

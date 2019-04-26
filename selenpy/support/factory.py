@@ -21,7 +21,7 @@ def switch_to_driver(driver_key="default"):
 
 
 def close_browser():    
-    _get_shared_driver().close()    
+    get_shared_driver().close()    
 
 
 def quit_all_browsers():
