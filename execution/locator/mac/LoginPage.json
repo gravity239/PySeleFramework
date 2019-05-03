@@ -1,0 +1,20 @@
+{
+	"default":{	
+		"_txtUsernameLocator":{
+			"type":"xpath",
+			"value":"//input[@id='username']"
+		},
+		"_txtPasswordLocator": {
+			"type":"xpath",
+			"value":"//input[@id='password']"
+		},
+		"_cmbRepoLocator": {
+			"type":"xpath",
+			"value":"//select[@id='repository']"
+		},
+		"_btnLoginLocator": {
+			"type":"xpath",
+			"value":"//div[@class='btn-login' and .='Login']"
+		}
+	}
+}

@@ -5,9 +5,9 @@ __driver = {}
 __shared_web_driver = None
 
 
-def start_driver(name, remote_host, driver_key="default"):
+def start_driver(name, remote_host, browser_settings, driver_key="default",):
     __shared_web_driver = SharedWebDriver()
-    __shared_web_driver.driver = DriverManager().start_driver(name, remote_host , None) 
+    __shared_web_driver.driver = DriverManager().start_driver(name, remote_host, browser_settings)
     __driver[driver_key] = __shared_web_driver
     Key.current = driver_key
 

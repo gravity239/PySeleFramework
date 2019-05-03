@@ -8,15 +8,19 @@ class DriverManager():
 
     def __init__(self):
         self._browser_manager = {
-            BrowserName.CHROME : self._start_chrome,
-            BrowserName.FIREFOX: self._start_firefox
+            BrowserName.CHROME: self._start_chrome,
+            BrowserName.FIREFOX: self._start_firefox,
+            BrowserName.NATIVE: self._start_native
         }
     
-    def start_driver(self, name, remote_host, capabilities):
-        return self._browser_manager[name](remote_host, capabilities)
+    def start_driver(self, name, remote_host, browser_settings):
+        return self._browser_manager[name](remote_host, browser_settings)
     
-    def _start_chrome(self, remote_host, capabilities):
-        return ChromeDriver().create_driver(remote_host, capabilities)
+    def _start_chrome(self, remote_host, browser_settings):
+        return ChromeDriver().create_driver(remote_host, browser_settings)
     
-    def _start_firefox(self, remote_host, capabilities):
-        return FirefoxDriver().create_driver(remote_host, capabilities)
+    def _start_firefox(self, remote_host, browser_settings):
+        return FirefoxDriver().create_driver(remote_host, browser_settings)
+
+    def _start_native(self, remote_host, browser_settings):
+        return NativeDriver().create_driver(remote_host, browser_settings)
