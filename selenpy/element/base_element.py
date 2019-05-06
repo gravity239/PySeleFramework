@@ -9,26 +9,42 @@ from selenpy.support.conditions import be
 
 
 class BaseElement():
-    __locator = None
-    __strategies = None
+    _locator = None
+    _strategies = None
+    _dymanic_locator = None
     
     def __init__(self, locator):
-        self.__strategies = {
+        self._strategies = {
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
             'css': self._find_by_css_selector,
             'class': self._find_by_class_name
         }
-        self.__locator = locator
+        self._locator = locator
+        self._dymanic_locator = locator
+    
+    def format(self, *args):
+        self._locator = self._dymanic_locator % (args)
 
     @property
     def _driver(self):
         return browser.get_driver()
+    
+    @property
+    def text(self):
+        return self.find_element().text
+    
+    @property
+    def tag_name(self):
+        return self.find_element().tag_name
+    
+    def get_attribute(self, name):
+        return self.find_element().get_attribute(name)
 
     def _find(self, first_only=True):
-        prefix, criteria = self.__parse_locator(self.__locator)
-        strategy = self.__strategies[prefix]
+        prefix, criteria = self.__parse_locator(self._locator)
+        strategy = self._strategies[prefix]
         elements = strategy(criteria)
         if first_only: 
             return elements[0]
@@ -55,7 +71,7 @@ class BaseElement():
         index = self.__get_locator_separator_index(locator)
         if index != -1:
             prefix = locator[:index].strip()
-            if prefix in self.__strategies:
+            if prefix in self._strategies:
                 return prefix, locator[index + 1:].lstrip()
         return 'default', locator
     
@@ -103,12 +119,12 @@ class BaseElement():
    
     def wait_for_visible(self, timeout=None):
         if timeout == None: timeout = config.timeout            
-        prefix, criteria = self.__parse_locator(self.__locator)
+        prefix, criteria = self.__parse_locator(self._locator)
         return WebDriverWait(self._driver, timeout).until(EC.visibility_of_element_located((self.__by(prefix), criteria)))
         
     def wait_for_invisible(self, timeout=None):
         if timeout == None: timeout = config.timeout            
-        prefix, criteria = self.__parse_locator(self.__locator)
+        prefix, criteria = self.__parse_locator(self._locator)
         WebDriverWait(self._driver, timeout).until(EC.invisibility_of_element_located((self.__by(prefix), criteria)))    
     
     def wait_until(self, element_condition, timeout=None, polling=None):

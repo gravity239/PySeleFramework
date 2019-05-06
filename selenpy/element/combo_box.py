@@ -3,13 +3,16 @@ from selenium.webdriver.support.ui import Select
 
 
 class ComboBox(BaseElement):
-    
+    _s = None    
+
     def __init__(self, locator):
         super().__init__(locator)    
     
     @property
     def _select(self):
-        return Select(self.find_element())
+        if self._s is None:
+            self._s = Select(self.find_element())
+        return self._s
 
     def select_by_value(self, value):        
         self._select.select_by_value(value)
