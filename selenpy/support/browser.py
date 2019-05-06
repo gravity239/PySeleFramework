@@ -30,6 +30,10 @@ def quit_all_browsers():
 
 def start_driver(name, remote_host, key="default"):
     factory.start_driver(name, remote_host, key)
+    
+def select_main_window():
+    handles = get_driver().window_handles
+    get_driver().switch_to.window(handles[0])
 
 
 def wait_until(webdriver_condition, timeout=None, polling=None):
