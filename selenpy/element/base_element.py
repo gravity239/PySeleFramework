@@ -26,10 +26,19 @@ class BaseElement():
     def _driver(self):
         return browser.get_driver()
 
-    def find_element(self):
+    def _find(self, first_only=True):
         prefix, criteria = self.__parse_locator(self.__locator)
         strategy = self.__strategies[prefix]
-        return strategy(criteria)
+        elements = strategy(criteria)
+        if first_only: 
+            return elements[0]
+        return elements
+
+    def find_element(self):
+        return self._find()
+    
+    def find_elements(self):
+        return self._find(False)
     
     def click(self):
         element = self.find_element()
@@ -66,19 +75,19 @@ class BaseElement():
         return min(locator.find('='), locator.find(':'))
     
     def _find_by_id(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.ID, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.ID, criteria)))        
     
     def _find_by_name(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.NAME, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.NAME, criteria)))        
     
     def _find_by_xpath(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.XPATH, criteria)))       
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.XPATH, criteria)))       
     
     def _find_by_css_selector(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CSS_SELECTOR, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, criteria)))        
     
     def _find_by_class_name(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CLASS_NAME, criteria)))     
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.CLASS_NAME, criteria)))     
             
     def is_displayed(self, timeout=None):
         try:
