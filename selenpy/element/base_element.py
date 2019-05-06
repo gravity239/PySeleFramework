@@ -4,7 +4,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenpy.common import config
 from selenpy.helper.wait import wait_for
-from pywinauto.findwindows import find_element
 
 
 class BaseElement():
@@ -80,10 +79,10 @@ class BaseElement():
         return self.wait_for_visible(timeout)
     
     def is_enabled(self):
-        return find_element().is_enabled()
+        return self.find_element().is_enabled()
     
     def is_selected(self):
-        return find_element().is_selected()
+        return self.find_element().is_selected()
    
     def wait_for_visible(self, timeout=None):
         if timeout == None: timeout = config.timeout            
