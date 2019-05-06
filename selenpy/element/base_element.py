@@ -1,9 +1,11 @@
-from selenpy.support import browser 
+from selenpy.support import browser
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenpy.common import config
 from selenpy.helper.wait import wait_for
+from selenpy.support.conditions import be
 
 
 class BaseElement():
@@ -30,7 +32,10 @@ class BaseElement():
         return strategy(criteria)
     
     def click(self):
-        self.find_element().click()
+        element = self.find_element()
+        # Wait until element is enabled before clicking
+        wait_for(element, be.enabled, config.timeout, config.poll_during_waits)
+        element.click()
         
     def send_keys(self, *value):
         self.find_element().send_keys(value)
@@ -73,10 +78,13 @@ class BaseElement():
         return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CSS_SELECTOR, criteria)))        
     
     def _find_by_class_name(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CLASS_NAME, criteria)))        
-    
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CLASS_NAME, criteria)))     
+            
     def is_displayed(self, timeout=None):
-        return self.wait_for_visible(timeout)
+        try:
+            return self.wait_for_visible(timeout)
+        except TimeoutException:
+            return False
     
     def is_enabled(self):
         return self.find_element().is_enabled()
@@ -92,7 +100,7 @@ class BaseElement():
     def wait_for_invisible(self, timeout=None):
         if timeout == None: timeout = config.timeout            
         prefix, criteria = self.__parse_locator(self.__locator)
-        WebDriverWait(self._driver, timeout).until(EC.invisibility_of_element_located((self.__by(prefix), criteria)))
+        WebDriverWait(self._driver, timeout).until(EC.invisibility_of_element_located((self.__by(prefix), criteria)))    
     
     def wait_until(self, element_condition, timeout=None, polling=None):
         if timeout is None:
