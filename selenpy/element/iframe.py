@@ -7,4 +7,4 @@ class IFrame(BaseElement):
         super().__init__(locator)    
 
     def switch_to(self): 
-        self._driver.switch_to.frame(self.find_element())        
+        self._driver.switch_to.frame(self.element)        

@@ -49,6 +49,17 @@ class Visible(ElementCondition):
 visible = Visible()
 
 
+class Enabled(ElementCondition):
+
+    def fn(self, element):
+        if not element.is_enabled():
+            raise ConditionMismatchException()
+        return element
+
+
+enabled = Enabled()
+
+
 class Value(ElementCondition):
     
     def __init__(self, exact_value):

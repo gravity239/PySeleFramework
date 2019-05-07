@@ -1,42 +1,74 @@
-import os
-
 from selenpy.support import browser
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import (TimeoutException, StaleElementReferenceException)
 from selenium.webdriver.common.by import By
 from selenpy.common import config
 from selenpy.helper.wait import wait_for
-from pywinauto.findwindows import find_element
+from selenpy.support.conditions import be
 
 
 class BaseElement():
-    __locator = None
-    __strategies = None
     
-    def __init__(self, locator, **kwargs):
-        self.__strategies = {
+    def __init__(self, locator):
+        self._strategies = {
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
             'css': self._find_by_css_selector,
             'class': self._find_by_class_name
         }
-        self.__locator = locator
-        self.__parent = kwargs.get('parent')
-        # self.__new_locator = locator.value().format(kwargs.get('dynamic_value'))
+        self._locator = locator
+        self._dymanic_locator = locator
+        self._element = None
+
+    def format(self, *args):
+        self._locator = self._dymanic_locator % (args)
+        self._element = None
+
+    @property
+    def element(self):
+        if self._element is None:
+            self._element = self._find()
+        else:
+            try:
+                self._element.is_enabled()
+            except StaleElementReferenceException:
+                self._element = self._find()
+        return self._element
 
     @property
     def _driver(self):
         return browser.get_driver()
 
-    def find_element(self):
-        prefix, criteria = self.__parse_locator(self.__locator)
-        strategy = self.__strategies[prefix]
-        return strategy(criteria)
+    @property
+    def text(self):
+        return self.element.text
 
+    @property
+    def tag_name(self):
+        return self.element.tag_name
+
+    def get_attribute(self, name):
+        return self.element.get_attribute(name)
+
+    def _find(self, first_only=True):
+        prefix, criteria = self.__parse_locator(self._locator)
+        strategy = self._strategies[prefix]
+        elements = strategy(criteria)
+        if first_only:
+            return elements[0]
+        return elements
+
+    def find_elements(self):
+        return self._find(False)
+    
     def click(self):
-        self.find_element().click()
-
+        element = self.element
+        # Wait until element is enabled before clicking
+        wait_for(element, be.enabled, config.timeout, config.poll_during_waits)
+        element.click()
+        
     def send_keys(self, *value):
         self.find_element().send_keys(value)
 
@@ -49,6 +81,8 @@ class BaseElement():
     #         if prefix in self.__strategies:
     #             return prefix, locator[index + 1:].lstrip()
     #     return 'default', locator
+
+        self.element.send_keys(value)
 
     def __parse_locator(self, locator):
         return locator.by(), locator.value()
@@ -69,37 +103,40 @@ class BaseElement():
         return min(locator.find('='), locator.find(':'))
     
     def _find_by_id(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.ID, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.ID, criteria)))
     
     def _find_by_name(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.NAME, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.NAME, criteria)))
     
     def _find_by_xpath(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.XPATH, criteria)))       
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.XPATH, criteria)))
     
     def _find_by_css_selector(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CSS_SELECTOR, criteria)))        
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, criteria)))
     
     def _find_by_class_name(self, criteria):
-        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_element_located((By.CLASS_NAME, criteria)))        
-    
+        return WebDriverWait(self._driver, config.timeout).until(EC.presence_of_all_elements_located((By.CLASS_NAME, criteria)))
+
     def is_displayed(self, timeout=None):
-        return self.wait_for_visible(timeout)
+        try:
+            return self.wait_for_visible(timeout) is not None
+        except TimeoutException:
+            return False
     
     def is_enabled(self):
-        return find_element().is_enabled()
+        return self._element.is_enabled()
     
     def is_selected(self):
-        return find_element().is_selected()
+        return self._element.is_selected()
    
     def wait_for_visible(self, timeout=None):
-        if timeout == None: timeout = config.timeout            
-        prefix, criteria = self.__parse_locator(self.__locator)
+        if timeout is None: timeout = config.timeout
+        prefix, criteria = self.__parse_locator(self._locator)
         return WebDriverWait(self._driver, timeout).until(EC.visibility_of_element_located((self.__by(prefix), criteria)))
         
     def wait_for_invisible(self, timeout=None):
-        if timeout == None: timeout = config.timeout            
-        prefix, criteria = self.__parse_locator(self.__locator)
+        if timeout is None: timeout = config.timeout
+        prefix, criteria = self.__parse_locator(self._locator)
         WebDriverWait(self._driver, timeout).until(EC.invisibility_of_element_located((self.__by(prefix), criteria)))
     
     def wait_until(self, element_condition, timeout=None, polling=None):
@@ -108,4 +145,4 @@ class BaseElement():
         if polling is None:
             polling = config.poll_during_waits
     
-        return wait_for(self.find_element(), element_condition, timeout, polling)
+        return wait_for(self.element, element_condition, timeout, polling)
