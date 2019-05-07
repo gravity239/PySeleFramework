@@ -1,4 +1,3 @@
-
 from selenpy.support import factory
 from selenpy.helper import config_file_parser
 from selenpy.common import config
@@ -12,9 +11,9 @@ def get_driver():
 def maximize_browser():
     get_driver().maximize_window()
 
-        
+
 def open_url(url):
-    get_driver().get(url)    
+    get_driver().get(url)
 
 
 def switch_to_driver(driver_key="default"):
@@ -29,7 +28,8 @@ def quit_all_browsers():
     factory.quit_all_browsers()
 
 
-def start_driver(name, remote_host, browser_settings, key="default"):
+def start_driver(name, remote_host, browser_config_file= None, key="default"):
+    browser_settings = get_browser_settings(browser_config_file)
     factory.start_driver(name, remote_host, browser_settings, key)
 
 
@@ -41,5 +41,9 @@ def wait_until(webdriver_condition, timeout=None, polling=None):
 
     return wait_for(get_driver(), webdriver_condition, timeout, polling)
 
+
 def get_browser_settings(file_path):
-    return config_file_parser.parseConfigFile(file_path)
+    if file_path is not None:
+        return config_file_parser.parseConfigFile(file_path)
+    else:
+        return None

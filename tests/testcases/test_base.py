@@ -1,9 +1,7 @@
 import unittest
 import pytest
-import os
 from selenpy.support import browser
-from selenpy.support import browser
-
+from tests.common.utilities import Utilities
 import logging
 
 
@@ -12,9 +10,25 @@ class TestBase(unittest.TestCase):
     @pytest.fixture(scope="session", autouse=True)
     def setup(self):
         logging.info("Starting the test on " + str(pytest.browser_name))
-        browser_settings = browser.get_browser_settings(pytest.browser_config_file)
-        browser.start_driver(pytest.browser_name, pytest.remote_host, browser_settings)
+        browser.start_driver(pytest.browser_name, pytest.remote_host, pytest.browser_config_file, pytest.run_mode)
         # browser.maximize_browser() - this doesn't work with android chrome
         # Close all browsers when tests have been finished
         yield        
-        browser.quit_all_browsers()        
+        browser.quit_all_browsers()
+
+    def start_driver(self, name, remote_host, browser_config_file, driver_key="default", run_mode="desktop"):
+        return browser.start_driver(name, remote_host, browser_config_file, driver_key, run_mode)
+
+    def handle_exception(self, exception):
+        # print(exception)
+        if not isinstance(exception, AssertionError):
+            Utilities.attach_screenshot_for_allure_report()
+
+        raise exception
+
+    def assertNotIn(self, member, container, msg):
+        try:
+            unittest.TestCase.assertNotIn(self, member, container)
+        except:
+            self.fail(msg)
+
