@@ -70,7 +70,7 @@ class BaseElement():
         element.click()
         
     def send_keys(self, *value):
-        self.find_element().send_keys(value)
+        self.element.send_keys(value)
 
     # def __parse_locator(self, locator):
     #     if locator.startswith(('//', '(//')):
@@ -81,8 +81,6 @@ class BaseElement():
     #         if prefix in self.__strategies:
     #             return prefix, locator[index + 1:].lstrip()
     #     return 'default', locator
-
-        self.element.send_keys(value)
 
     def __parse_locator(self, locator):
         return locator.by(), locator.value()
