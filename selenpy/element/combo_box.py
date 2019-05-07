@@ -11,7 +11,7 @@ class ComboBox(BaseElement):
     @property
     def _select(self):
         if self._s is None:
-            self._s = Select(self.find_element())
+            self._s = Select(self.element)
         return self._s
 
     def select_by_value(self, value):        
