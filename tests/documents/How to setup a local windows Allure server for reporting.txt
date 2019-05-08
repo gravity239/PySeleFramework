@@ -1,0 +1,38 @@
+1. On the machine that acts as local windows Allure Report server, install Allure commandline application following
+the instructions as https://docs.qameta.io/allure/#_windows
+
+2. On client machines, they should map a network drive to the folder that stores all generated report files from Allure plugin. After that,
+pass this path to the argument "--alluredir=$path" when running tests. For e.x: $path = "Z:\AllureResults"
+
+3. On the server, open command line windows and run: allure open "C:\Users\long.do\AppData\Local\Temp\1696678230558166184\allure-report" -p 2309
+This command will start a web server for the allure report in the above folder at port 2309. You can change to any port you want
+
+4. On the server, create a power script (.PS1) that helps monitor $path as mentioned in step 2. This script
+will auto generate the new report to the folder in step 2 each 30s if there are any changes in the $path. Right-click on
+the script and Run with powershell
+
+### SET FOLDER TO WATCH + FILES TO WATCH + SUBFOLDERS YES/NO
+    $watcher = New-Object System.IO.FileSystemWatcher
+    $watcher.Path = "Z:\AllureResults"
+    $watcher.Filter = "*.*"
+    $watcher.IncludeSubdirectories = $true
+    $watcher.EnableRaisingEvents = $true
+
+### DEFINE ACTIONS AFTER AN EVENT IS DETECTED
+    $action = { $path = $Event.SourceEventArgs.FullPath
+                $changeType = $Event.SourceEventArgs.ChangeType
+                $logline = "$(Get-Date), $changeType, $path"
+                Add-content "D:\allure_log.txt" -value $logline
+                cmd.exe /c allure generate "Z:\AllureResults" --output "C:\Users\long.do\AppData\Local\Temp\1696678230558166184\allure-report" --clean
+              }
+### DECIDE WHICH EVENTS SHOULD BE WATCHED
+    Register-ObjectEvent $watcher "Created" -Action $action
+    Register-ObjectEvent $watcher "Changed" -Action $action
+    Register-ObjectEvent $watcher "Deleted" -Action $action
+    Register-ObjectEvent $watcher "Renamed" -Action $action
+    while ($true) {sleep 30}
+
+5. After running tests from any machines, we just need to navigate to the web server in step 3 to check the test report.
+
+**Note that: This solution may not be reliable when machines running tests at a same time.
+

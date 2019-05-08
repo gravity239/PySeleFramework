@@ -28,7 +28,7 @@ class LocatorLoader(object):
             self.__load_locator(derived_class_name)
 
     def create_locator(self, locator_name):
-        return BaseLocator.createLocator(self.locators, locator_name)
+        return BaseLocator.create_locator(self.locators, locator_name)
 
     def __load_locator(self, derived_class_name):
         import execution
@@ -48,36 +48,37 @@ class BaseLocator(object):
     @staticmethod
     def create_locator(locator_dict, name):
         try:
-            return BaseLocator(locator_dict, name)
+            return BaseLocator(locator_dict, name).value()
         except Exception as ex:
             print("Warning: Cannot find the locator value of '{0}'".format(name))
             print(ex)
             return None
 
     def __init__(self, locator_dict, name):
-        tp = locator_dict[name]["type"]
-        if tp == 'xpath':
-            self._by = By.XPATH
-        elif tp == 'class-name':
-            self._by = By.CLASS_NAME
-        elif tp == 'css':
-            self._by = By.CSS_SELECTOR
-        elif tp == 'id':
-            self._by = By.ID
-        elif tp == 'name':
-            self._by = By.NAME
-        elif tp == 'tag-name':
-            self._by = By.TAG_NAME
-        elif tp == 'link-text':
-            self._by = By.LINK_TEXT
-        elif tp == 'partial-link-text':
-            self._by = By.PARTIAL_LINK_TEXT
-        else:
-            self._by = By.XPATH
         self._value = locator_dict[name]['value']
+        # tp = locator_dict[name]["type"]
+        # if tp == 'xpath':
+        #     self._by = By.XPATH
+        # elif tp == 'class-name':
+        #     self._by = By.CLASS_NAME
+        # elif tp == 'css':
+        #     self._by = By.CSS_SELECTOR
+        # elif tp == 'id':
+        #     self._by = By.ID
+        # elif tp == 'name':
+        #     self._by = By.NAME
+        # elif tp == 'tag-name':
+        #     self._by = By.TAG_NAME
+        # elif tp == 'link-text':
+        #     self._by = By.LINK_TEXT
+        # elif tp == 'partial-link-text':
+        #     self._by = By.PARTIAL_LINK_TEXT
+        # else:
+        #     self._by = By.XPATH
+        # self._value = locator_dict[name]['value']
 
-    def by(self):
-        return self._by
-
+    # def by(self):
+    #     return self._by
+    #
     def value(self):
         return self._value

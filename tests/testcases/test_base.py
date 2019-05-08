@@ -1,4 +1,6 @@
 import unittest
+
+import allure
 import pytest
 from selenpy.support import browser
 from tests.common.utilities import Utilities
@@ -31,4 +33,8 @@ class TestBase(unittest.TestCase):
             unittest.TestCase.assertNotIn(self, member, container)
         except:
             self.fail(msg)
+
+    @allure.step
+    def explore_validations(self, validations):
+        pass
 

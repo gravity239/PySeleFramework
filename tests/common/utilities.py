@@ -19,3 +19,5 @@ class Utilities(object):
             allure.attach(get_shared_driver().get_screenshot_as_png(),
                           name="Screenshot_" + str_time,
                           attachment_type=AttachmentType.PNG)
+
+

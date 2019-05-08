@@ -7,7 +7,7 @@ class PageBase(LocatorLoader):
 
     def __init__(self, derived_class_name):
         LocatorLoader.__init__(self, derived_class_name)
-        self.init_elements()
+        # self.init_elements()
 
     def create_locator(self, locator_name):
         return BaseLocator.create_locator(self.locators, locator_name)

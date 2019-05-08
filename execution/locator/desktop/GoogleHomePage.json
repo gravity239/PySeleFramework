@@ -1,8 +1,7 @@
 {
-	"default":{	
+	"default":{
 		"_txt_search_locator":{
-			"type":"name",
-			"value":"q"
+			"value":"name=q"
 		}
 	}
 }

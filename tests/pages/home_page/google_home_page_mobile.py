@@ -4,10 +4,6 @@ from tests.pages.home_page.google_home_page_desktop import GoogleHomePageDesktop
 
 
 class GoogleHomePageMobile(GoogleHomePageDesktop):
-    def __init__(self):
-        GoogleHomePageDesktop.__init__(self)
-
-    # _txt_search = TextBox("name=q")
 
     def open_google(self):
         browser.open_url("https://bing.com")
