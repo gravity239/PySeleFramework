@@ -26,7 +26,7 @@ class BaseElement():
     @property
     def element(self):
         if self._element is None:
-            self.__find()
+            self.find_element()
         else:
             try:                
                 self._element.is_enabled()

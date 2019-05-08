@@ -3,10 +3,10 @@ from selenium.webdriver.support.ui import Select
 
 
 class ComboBox(BaseElement):
-    _s = None    
 
     def __init__(self, locator, parent=None):
         super().__init__(locator, parent)
+        self._s = None
     
     @property
     def _select(self):
