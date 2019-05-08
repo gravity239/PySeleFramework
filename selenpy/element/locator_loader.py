@@ -31,9 +31,9 @@ class LocatorLoader(object):
         return BaseLocator.create_locator(self.locators, locator_name)
 
     def __load_locator(self, derived_class_name):
-        import execution
+        import tests
         file_path = os.path.join(
-            os.path.dirname(execution.__file__),
+            os.path.dirname(tests.__file__),
             'locator',
             factory.get_current_run_mode(),
             '{0}.json'.format(derived_class_name))

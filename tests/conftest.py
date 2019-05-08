@@ -30,7 +30,7 @@ def browser_name(request):
 def browser_config_file(request):
     import os
     browser_config_file = request.config.getoption("--browser-config-file",
-                                                   os.path.join("execution/config/browser_setting_default.cfg"), True)
+                                                   os.path.join("tests/config/browser_setting_default.cfg"), True)
     pytest.browser_config_file = browser_config_file
     return browser_config_file
 
