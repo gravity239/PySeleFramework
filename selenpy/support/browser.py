@@ -1,11 +1,14 @@
 
 from selenpy.support import factory
-from selenpy.common import config
-from selenpy.helper.wait import wait_for
+from selenpy.helper.wait import wait_until
 
 
 def get_driver():
     return factory.get_shared_driver()
+
+
+def get_title():
+    return get_driver().title
 
 
 def maximize_browser():
@@ -30,16 +33,13 @@ def quit_all_browsers():
 
 def start_driver(name, remote_host, key="default"):
     factory.start_driver(name, remote_host, key)
+
     
 def select_main_window():
     handles = get_driver().window_handles
     get_driver().switch_to.window(handles[0])
 
 
-def wait_until(webdriver_condition, timeout=None, polling=None):
-    if timeout is None:
-        timeout = config.timeout
-    if polling is None:
-        polling = config.poll_during_waits
+def wait_for_title_contains(value, timeout=None):
+    wait_until(lambda: value in get_title() , "Title '%s' did not display after after <TIMEOUT>." % value, timeout)
 
-    return wait_for(get_driver(), webdriver_condition, timeout, polling)

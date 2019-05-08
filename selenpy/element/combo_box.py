@@ -5,8 +5,8 @@ from selenium.webdriver.support.ui import Select
 class ComboBox(BaseElement):
     _s = None    
 
-    def __init__(self, locator):
-        super().__init__(locator)    
+    def __init__(self, locator, parent=None):
+        super().__init__(locator, parent)
     
     @property
     def _select(self):
