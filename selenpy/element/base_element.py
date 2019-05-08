@@ -5,7 +5,7 @@ from selenpy.helper.wait import wait_until
 
 
 class BaseElement():
-
+    
     def __init__(self, locator, parent=None):
         self._strategies = {
             'id': self.__find_by_id,
@@ -26,9 +26,9 @@ class BaseElement():
     @property
     def element(self):
         if self._element is None:
-            self.__find()
+            self.find_element()
         else:
-            try:
+            try:                
                 self._element.is_enabled()
             except StaleElementReferenceException:
                 self._element = self.find_element()
@@ -37,11 +37,11 @@ class BaseElement():
     @property
     def text(self):
         return self.element.text
-
+    
     @property
     def tag_name(self):
         return self.element.tag_name
-
+    
     def get_attribute(self, name):
         return self.element.get_attribute(name)
 
@@ -78,62 +78,61 @@ class BaseElement():
         """Wait until element is visible
         """
         wait_until(lambda: self.is_displayed(),
-                   "Element '%s' not visible after <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' not visible after <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_invisible(self, timeout=None):
         """ Wait until element is not visible
         """
         wait_until(lambda: not self.is_displayed(),
-                   "Element '%s' still visible after <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' still visible after <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_enabled(self, timeout=None):
         """
         Waits until element is enabled.
         """
         wait_until(lambda: self.is_enabled(),
-                   "Element '%s' was not enabled in <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' was not enabled in <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_disabled(self, timeout=None):
         """
         Waits until element is disabled.
         """
         wait_until(lambda: not self.is_enabled(),
-                   "Element '%s' was not disabled in <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' was not disabled in <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_appear(self, timeout=None):
         """Wait until element appears in DOM.
         """
         wait_until(lambda: self._find() is not None,
-                   "Element '%s' did not exit in <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' did not exit in <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_disappear(self, timeout=None):
         """Wait until element disappears in DOM.
         """
         wait_until(lambda: self._find() is None,
-                   "Element '%s' did not exit in <TIMEOUT>." % self._locator,
-                   timeout)
+            "Element '%s' did not exit in <TIMEOUT>." % self._locator,
+            timeout)
 
     def wait_for_text_contains(self, text, timeout=None):
         """Wait until element contains text.
         """
         wait_until(lambda: text in self.text,
-                   "Element '%s' did not get text '%s' in <TIMEOUT>." % (self._locator, text),
-                   timeout)
+            "Element '%s' did not get text '%s' in <TIMEOUT>." % (self._locator, text),
+            timeout)
 
     def wait_for_text_not_contains(self, text, timeout=None):
         """Wait until element does not contain text.
         """
         wait_until(lambda: text not in self.text,
-                   "Element '%s' still had text '%s' after <TIMEOUT>." % (self._locator, text),
-                   timeout)
+            "Element '%s' still had text '%s' after <TIMEOUT>." % (self._locator, text),
+            timeout)
 
-        # private methods
-
+    # private methods
     @property
     def __driver(self):
         return browser.get_driver()
@@ -147,22 +146,22 @@ class BaseElement():
             if prefix in self._strategies:
                 return prefix, locator[index + 1:].lstrip()
         return 'default', locator
-
+    
     def __by(self, prefix):
-        if prefix == "class":
-            return By.CLASS_NAME
-        elif prefix == "css":
-            return By.CSS_SELECTOR
+        if prefix == "class": 
+            return By.CLASS_NAME 
+        elif prefix == "css" : 
+            return By.CSS_SELECTOR 
         else:
             return prefix
-
+    
     def __get_locator_separator_index(self, locator):
         if '=' not in locator:
             return locator.find(':')
         if ':' not in locator:
             return locator.find('=')
         return min(locator.find('='), locator.find(':'))
-
+    
     def __find(self, first_only=True):
         prefix, criteria = self.__parse_locator(self._locator)
         strategy = self._strategies[prefix]
@@ -170,7 +169,7 @@ class BaseElement():
         if self._parent:
             if type(self._parent) is not BaseElement:
                 raise ValueError('Parent must be selenly BaseElement but it '
-                                 'was {}.'.format(type(self._parent)))
+                             'was {}.'.format(type(self._parent)))
             else:
                 parent = self._parent.element
         else:

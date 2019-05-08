@@ -4,8 +4,7 @@ from selenpy.browser.firefox import FirefoxDriver
 from selenpy.browser.native import NativeDriver
 
 
-class DriverManager():
-    _browser_manager = None
+class DriverManager():    
 
     def __init__(self):
         self._browser_manager = {

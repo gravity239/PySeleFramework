@@ -1,3 +1,4 @@
+
 from selenpy.support import factory
 from selenpy.helper import config_file_parser
 from selenpy.helper.wait import wait_until
@@ -9,6 +10,7 @@ def get_driver():
 
 def get_title():
     return get_driver().title
+
 
 def maximize_browser():
     get_driver().maximize_window()
@@ -45,11 +47,5 @@ def get_browser_settings(file_path):
     else:
         return None
 
-
-def select_main_window():
-    handles = get_driver().window_handles
-    get_driver().switch_to.window(handles[0])
-
-
 def wait_for_title_contains(value, timeout=None):
-    wait_until(lambda: value in get_title(), "Title '%s' did not display after after <TIMEOUT>." % value, timeout)
+    wait_until(lambda: value in get_title() , "Title '%s' did not display after after <TIMEOUT>." % value, timeout)
