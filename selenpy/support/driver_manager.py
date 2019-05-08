@@ -3,8 +3,7 @@ from selenpy.browser.chrome import ChromeDriver
 from selenpy.browser.firefox import FirefoxDriver
 
 
-class DriverManager():
-    _browser_manager = None
+class DriverManager():    
 
     def __init__(self):
         self._browser_manager = {
