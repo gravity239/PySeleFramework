@@ -5,7 +5,7 @@ the instructions as https://docs.qameta.io/allure/#_windows
 pass this path to the argument "--alluredir=$path" when running tests. For e.x: $path = "Z:\AllureResults"
 
 3. On the server, open command line windows and run: allure open "C:\Users\long.do\AppData\Local\Temp\1696678230558166184\allure-report" -p 2309
-This command will start a web server for the allure report in the above folder at port 2309. You can change to any port you want
+This command will start a web server for the allure report in the above folder (empty folder is fine) at port 2309. You can change to any port you want
 
 4. On the server, create a power script (.PS1) that helps monitor $path as mentioned in step 2. This script
 will auto generate the new report to the folder in step 2 each 30s if there are any changes in the $path. Right-click on
@@ -33,6 +33,8 @@ the script and Run with powershell
     while ($true) {sleep 30}
 
 5. After running tests from any machines, we just need to navigate to the web server in step 3 to check the test report.
+If you are already in the web server, just refresh the browser for the new report. Note that we may wait 30s for the new
+ report or you can set this period in the .PS1 script
 
 **Note that: This solution may not be reliable when machines running tests at a same time.
 
