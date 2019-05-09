@@ -32,9 +32,9 @@ def quit_all_browsers():
     factory.quit_all_browsers()
 
 
-def start_driver(name, remote_host, browser_config_file= None, key="default"):
+def start_driver(name, remote_host, browser_config_file= None, run_mode="desktop", key="default"):
     browser_settings = get_browser_settings(browser_config_file)
-    factory.start_driver(name, remote_host, browser_settings, key)
+    factory.start_driver(name, remote_host, browser_settings, run_mode, key)
 
 def select_main_window():
     handles = get_driver().window_handles

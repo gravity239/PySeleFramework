@@ -1,16 +1,14 @@
-from selenpy.support.conditions import be, have
+import allure
+
 from selenpy.support import browser
 from tests.pages.home_page.google_home_page_desktop import GoogleHomePageDesktop
 
 
 class GoogleHomePageMobile(GoogleHomePageDesktop):
 
+    @allure.step
     def open_google(self):
+        self.log("Navigate to https://bing.com")
         browser.open_url("https://bing.com")
-        browser.wait_until(have.title("Bing"))
+        browser.wait_for_title_contains("Bing")
 
-    def search(self, key_word):
-        # self._txt_search.wait_for_visible()
-        self._txt_search.wait_until(be.visible)
-        self._txt_search.send_keys(key_word)
-        self._txt_search.wait_until(have.value(key_word))

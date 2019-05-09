@@ -1,13 +1,14 @@
 from importlib import import_module
 import sys
+from selenpy.support.factory import RunMode
 
 
 class Page:
 
-    @staticmethod
-    def get_page(parent_class, *args, **kwargs):
+    def get_page(self, parent_class, *args, **kwargs):
         try:
-            if '--run-mode=mobile' in sys.argv:
+
+            if ('--run-mode=mobile' in sys.argv and RunMode.current_run_mode is None) or RunMode.current_run_mode == "mobile":
                 module_name = parent_class.__module__ + "_mobile"
                 class_name = parent_class.__name__ + "Mobile"
             else:

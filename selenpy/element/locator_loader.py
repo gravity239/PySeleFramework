@@ -1,5 +1,5 @@
 import os
-
+import sys
 from selenium.webdriver.common.by import By
 from selenpy.support import factory
 
@@ -31,11 +31,17 @@ class LocatorLoader(object):
         return BaseLocator.create_locator(self.locators, locator_name)
 
     def __load_locator(self, derived_class_name):
+        if factory.get_current_run_mode() is None and '--run-mode=mobile' in sys.argv:
+            current_run_mode = "mobile"
+        elif factory.get_current_run_mode() is None and '--run-mode=mobile' not in sys.argv:
+            current_run_mode = "desktop"
+        else:
+            current_run_mode = factory.get_current_run_mode()
         import tests
         file_path = os.path.join(
             os.path.dirname(tests.__file__),
             'locator',
-            factory.get_current_run_mode(),
+            current_run_mode,
             '{0}.json'.format(derived_class_name))
 
         import json

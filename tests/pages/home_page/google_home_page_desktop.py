@@ -1,5 +1,4 @@
 import allure
-from multidict import MultiDict
 from selenpy.support import browser
 from tests.common.utilities import Utilities
 from tests.pages.home_page.google_home_page import GoogleHomePage
