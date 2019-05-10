@@ -28,8 +28,12 @@ class TestBase(unittest.TestCase):
 
         raise exception
 
-    def switch_driver(self, driver_key="default"):
+    def switch_driver(self, driver_key="default", instance_dict= None):
         browser.switch_to_driver(driver_key)
+        if instance_dict is not None:
+            for key in instance_dict:
+                instance_dict[key] = Page().get_page(key)
+
         # if browser.is_run_mode_changeed(driver_key) is True:
         #     parent_classes = Page().get_parent_classes()
         #     for i in range(len(parent_classes)):

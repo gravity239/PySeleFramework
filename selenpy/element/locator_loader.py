@@ -12,14 +12,6 @@ class LocatorLoader(object):
     
     For example: for a Page Object, named 'Home' and derived this class, we must create a file Home.json
     in folder src/execution/locator/ and put all locators of Home screen in this file with following format:
-    {
-        "default":{
-            "_btnLogOutLocator":{
-                "type":"xpath",
-                "value":"//div[@dir = 'auto' and text()='Log Out']"
-            }
-        }
-    }
     '''
 
     locators = {}
@@ -47,7 +39,15 @@ class LocatorLoader(object):
         import json
         with open(file_path) as handle:
             file_dict = json.loads(handle.read())
-            self.locators = file_dict["default"]
+            try:
+                if factory.get_current_browser_name().lower() == "firefox":
+                    self.locators = file_dict["firefox"]
+                elif factory.get_current_browser_name().lower() == "native":
+                    self.locators = file_dict["native"]
+                else:
+                    self.locators = file_dict["default"]
+            except:
+                self.locators = file_dict["default"] #in case we don't need define locator for multi browser
 
 class BaseLocator(object):
 
@@ -62,29 +62,6 @@ class BaseLocator(object):
 
     def __init__(self, locator_dict, name):
         self._value = locator_dict[name]['value']
-        # tp = locator_dict[name]["type"]
-        # if tp == 'xpath':
-        #     self._by = By.XPATH
-        # elif tp == 'class-name':
-        #     self._by = By.CLASS_NAME
-        # elif tp == 'css':
-        #     self._by = By.CSS_SELECTOR
-        # elif tp == 'id':
-        #     self._by = By.ID
-        # elif tp == 'name':
-        #     self._by = By.NAME
-        # elif tp == 'tag-name':
-        #     self._by = By.TAG_NAME
-        # elif tp == 'link-text':
-        #     self._by = By.LINK_TEXT
-        # elif tp == 'partial-link-text':
-        #     self._by = By.PARTIAL_LINK_TEXT
-        # else:
-        #     self._by = By.XPATH
-        # self._value = locator_dict[name]['value']
 
-    # def by(self):
-    #     return self._by
-    #
     def value(self):
         return self._value

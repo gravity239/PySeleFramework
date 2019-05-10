@@ -1,0 +1,26 @@
+1. There are 4 arguments we need to set before running any test, if we don't set them, they will be set to default value
+--driver="chrome" : start a chrome driver, it can be firefox or native (mobile native app)...
+--remote-host=None : Define remote host in case we use remote driver
+--browser-config-file="tests/config/browser_setting_default.cfg" : browser setting
+--run-mode="desktop" : It can be mobile or destkop
+
+2. We can use decorator to categorize tests. For example:
+@pytest.mark.smokeA
+def test_a(self)
+
+@pytest.mark.smokeB
+def test_b(self)
+
+If we run tests with -m "smokeA", only tests with "smokeA" decorator are run.
+
+We can also use -k EXPRESSION that only run module/test method which match the given. For example:
+pytest -k "_a" - that will run only test_a
+pytest -k "_a and _b" - that will run both sample tests above
+
+3. We can run tests in parallel using pytest-xdist plugin: pip install pytest-xdist.
+Usage: pyest -n 2 : that will send tests to 2 CPUs for running in parallel
+
+
+
+
+

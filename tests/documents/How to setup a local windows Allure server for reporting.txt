@@ -2,7 +2,8 @@
 the instructions as https://docs.qameta.io/allure/#_windows
 
 2. On client machines, they should map a network drive to the folder that stores all generated report files from Allure plugin. After that,
-pass this path to the argument "--alluredir=$path" when running tests. For e.x: $path = "Z:\AllureResults"
+pass this path to the argument "--alluredir=$path" when running tests. For e.x: $path = "Z:\AllureResults". Note that,
+allure plugin for pytest should be installed before: pip install allure-pytest
 
 3. On the server, open command line windows and run: allure open "C:\Users\long.do\AppData\Local\Temp\1696678230558166184\allure-report" -p 2309
 This command will start a web server for the allure report in the above folder (empty folder is fine) at port 2309. You can change to any port you want

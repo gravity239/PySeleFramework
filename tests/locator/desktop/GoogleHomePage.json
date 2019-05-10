@@ -3,5 +3,10 @@
 		"_txt_search_locator":{
 			"value":"name=q"
 		}
+	},
+	"firefox": {
+		"_txt_search_locator": {
+			"value": "//input[@name='q']"
+		}
 	}
 }

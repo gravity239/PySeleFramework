@@ -17,7 +17,9 @@ class Page:
             interface_module = import_module(module_name)
             interface_class = getattr(interface_module, class_name)
             instance = interface_class(*args, **kwargs)
+
         except (AttributeError, ModuleNotFoundError):
             raise ImportError("{} is not part of our interface collection!".format(module_name))
 
         return instance
+
