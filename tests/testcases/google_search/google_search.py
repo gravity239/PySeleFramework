@@ -70,7 +70,7 @@ class GoogleSearchTest(TestBase):
         #         # pip install multidict
         validations = MultiDict()  # This support multiple duplicate keys in dictionary like KeyValuePair collection
         try:
-            self.start_driver("chrome", None, "tests/config/browser_setting_default.cfg", "desktop",
+            self.start_driver("chrome", None, "tests/config/browser_setting_android.cfg", "desktop",
                               "second") # you just need connect your mobile to computer, no need Appium installed or change the browser setting to default so that it will create a new chorme on desktop
             self.start_driver("firefox", None, "tests/config/browser_setting_default.cfg", "mobile", "third")
 
