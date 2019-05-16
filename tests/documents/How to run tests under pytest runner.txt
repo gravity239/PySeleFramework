@@ -19,7 +19,7 @@ pytest -k "_a and _b" - that will run both sample tests above
 
 3. We can run tests in parallel using pytest-xdist plugin: pip install pytest-xdist.
 Usage: pyest -n 2 : that will send tests to 2 CPUs for running in parallel
-**Note that, currently it just supports parallel tests with only one driver created for each test.
+
 
 
 

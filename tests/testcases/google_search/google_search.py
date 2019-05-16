@@ -19,7 +19,7 @@ class GoogleSearchTest(TestBase):
             self.google_home.search("hello selenium")
             validations.extend(self.google_home.validate_searched_value("hello selenium"))
             self.google_home.search_parent("hello selenium parent")
-            validations.extend(self.google_home.validate_searched_value("hello selenium parent"))
+            validations.extend(self.google_home.validate_searched_value("hello selenium parent 1"))
             self.assertNotIn(False, validations.values(), self._testMethodName)
         except Exception as ex:
             self.handle_exception(ex)
@@ -27,14 +27,13 @@ class GoogleSearchTest(TestBase):
         finally:
             self.explore_validations(validations)
 
-
     # def test_search_002(self):
     #     '''Test search value in Google search in desktop and mobile chrome'''
     #     # validations = {}
     #     # pip install multidict
     #     validations = MultiDict()  # This support multiple duplicate keys in dictionary like KeyValuePair collection
     #     try:
-    #         self.start_driver("chrome", None, "tests/config/browser_setting_android.cfg", "mobile",
+    #         self.start_driver("chrome", None, "tests/config/browser_setting_default.cfg", "mobile",
     #                           "second")  # you just need connect your mobile to computer, no need Appium installed
     #         self.start_driver("firefox", None, "tests/config/browser_setting_default.cfg", "desktop", "third")
     #
@@ -56,7 +55,7 @@ class GoogleSearchTest(TestBase):
     #         self.google_home_desktop.open_google()
     #         self.google_home_desktop.search_parent("hello selenium parent by firefox")
     #         validations.extend(self.google_home_desktop.validate_searched_value("hello selenium parent by firefox"))
-    #         self.assertNotIn(False, validations.values(), self._testMethodName)
+    #         # self.assertNotIn(False, validations.values(), self._testMethodName)
     #     except Exception as ex:
     #         self.handle_exception(ex)
     #
@@ -71,9 +70,9 @@ class GoogleSearchTest(TestBase):
         #         # pip install multidict
         validations = MultiDict()  # This support multiple duplicate keys in dictionary like KeyValuePair collection
         try:
-            self.start_driver("chrome", None, "tests/config/browser_setting_android.cfg", "mobile",
+            self.start_driver("chrome", None, "tests/config/browser_setting_default.cfg", "desktop",
                               "second") # you just need connect your mobile to computer, no need Appium installed or change the browser setting to default so that it will create a new chorme on desktop
-            self.start_driver("firefox", None, "tests/config/browser_setting_default.cfg", "desktop", "third")
+            self.start_driver("firefox", None, "tests/config/browser_setting_default.cfg", "mobile", "third")
 
             self.switch_driver("default", instance_dict)
             instance_dict[GoogleHomePage].open_google()
@@ -88,7 +87,7 @@ class GoogleSearchTest(TestBase):
 
             self.switch_driver("third", instance_dict)
             instance_dict[GoogleHomePage].open_google()
-            instance_dict[GoogleHomePage].search_parent("hello selenium parent")
+            instance_dict[GoogleHomePage].search("hello selenium")
             validations.extend(instance_dict[GoogleHomePage].validate_searched_value("hello selenium parent"))
 
             self.assertNotIn(False, validations.values(), self._testMethodName)
