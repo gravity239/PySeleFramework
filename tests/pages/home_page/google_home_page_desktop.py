@@ -5,7 +5,7 @@ from tests.pages.home_page.google_home_page import GoogleHomePage
 
 class GoogleHomePageDesktop(GoogleHomePage):
 
-    @allure.step
+    # @allure.step
     def open_google(self):
         self.log("Navigate to https://google.com")
         browser.open_url("https://google.com")
@@ -23,7 +23,7 @@ class GoogleHomePageDesktop(GoogleHomePage):
         self._txt_search_parent.wait_for_visible()
         self._txt_search_parent.send_keys(key_word)
 
-    @allure.step
+
     def get_searched_value(self):
         return self._txt_search.value
 
